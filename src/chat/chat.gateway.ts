@@ -16,6 +16,18 @@ export class ChatGateway implements OnGatewayInit {
     this.logger.log('Initialized');
   }
 
+  @SubscribeMessage('roomInit')
+  handleCreateRoom(
+    client: Socket,
+    message: { admin: string; room: string; description: string },
+  ): void {
+    setTimeout(() => {
+      this.wss
+        .to(message.room)
+        .emit('changeScreen', { next: true, screen: 'step_2' });
+    }, 5000);
+  }
+
   @SubscribeMessage('chatToServer')
   handleMessage(
     client: Socket,

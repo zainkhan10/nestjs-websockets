@@ -95,7 +95,12 @@
                     if (this.isMemberOfActiveRoom) {
                         this.socket.chat.emit('leaveRoom', this.activeRoom)
                     } else {
-                        this.socket.chat.emit('joinRoom', this.activeRoom)
+                        this.socket.chat.emit('joinRoom', this.activeRoom);
+                        this.socket.chat.emit('roomInit', {
+                            admin: this.username,
+                            room: this.activeRoom,
+                            description: "Lorem ipsum"
+                        });
                     }
                 }
             },
@@ -113,6 +118,10 @@
                 });
                 this.socket.chat.on('leftRoom', (room) => {
                     this.rooms[room] = false
+                });
+                this.socket.chat.on('changeScreen', (data) => {
+                    alert("now the screen will changed")
+                    console.log("data: ", data)
                 });
                 this.socket.alert = io('http://localhost:3000/alert');
                 this.socket.alert.on('alertToClient', (msg) => {
